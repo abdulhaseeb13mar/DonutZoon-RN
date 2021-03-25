@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import WrapperScreen from '../DzComp/DzWrapperScreen';
 import {colors, textFont} from '../DzComp/DzColor';
@@ -15,16 +16,20 @@ import Loop from '../DzComp/DzFlatList';
 import RefNavigation from '../DzComp/DzRefNavigation';
 import {connect} from 'react-redux';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+// import FastImage from 'react-native-fast-image';
 import {
   DzsetCurrentProductAction,
   DzremoveFavAction,
   DzsetFavAction,
 } from '../DzRedux/DzActions';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DzSearchBar from '../DzComp/DzSearchBar';
 import DzHeader from '../DzComp/DzHeader';
-// import StarRating from '../starRating';
+import UseHeader from '../DzComp/DzHeader';
+import FastImage from 'react-native-fast-image';
+import Entypo from 'react-native-vector-icons/Entypo';
+import asd from '../DzPhotos/donut1.png';
 
 function DzHome(props) {
   useEffect(() => {
@@ -35,13 +40,18 @@ function DzHome(props) {
   const [Dzcategories, setDzCategories] = useState(Data.category);
   const [DzcurrentCat, setDzCurrentCat] = useState(Data.category[0]);
   const [DztabProducts, setDzTabProducts] = useState([]);
+  const [favourites, setFavourites] = useState([]);
 
   const DzchangeTab = (tab) => {
     setDzCurrentCat(tab);
     const filteredProducts = Data.product.filter(
       (item) => item.categoryId === tab.id,
     );
+    const filterFavorites = props.DzFavs.filter(
+      (item) => item.categoryId === tab.id,
+    );
     setDzTabProducts(filteredProducts);
+    setFavourites(filterFavorites);
   };
 
   const DzGotoFav = () => RefNavigation.Navigate('DzFav');
@@ -52,72 +62,82 @@ function DzHome(props) {
     RefNavigation.Navigate('DzSP');
   };
   return (
-    <WrapperScreen
-      style={{backgroundColor: 'white'}}
-      barStyle="light-content"
-      statusColor={colors.primary}>
-      <Text>asdas</Text>
-      {/* <View style={{flex: 1}}>
-        <Loop
-          numColumns={2}
-          horizontal={false}
-          data={DztabProducts}
-          renderItem={({item}) => (
-            <DzVerticalTile
-              item={item}
-              DzGoToSingleProduct={DzGoToSingleProduct}
-              DzFavs={props.DzFavs}
-              DzsetFav={(fd) => props.DzsetFavAction(fd)}
-              DzremoveFav={(fd) => props.DzremoveFavAction(fd)}
+    <WrapperScreen style={{backgroundColor: 'white'}}>
+      <Loop
+        ListHeaderComponent={
+          <ScrollView bounces={false}>
+            <UseHeader
+              leftIcon={Entypo}
+              rightIcon={Entypo}
+              leftIconName="shopping-cart"
+              rightIconName="magnifying-glass"
+              leftIconColor={colors.primary}
+              rightIconColor={colors.primary}
+              leftIconAction={DzGotoCart}
+              rightIconAction={DzGotoSearch}
+              Title={<Text style={{fontSize: 20}}>DONUT ZOON</Text>}
             />
-          )}
-          ListHeaderComponent={
-            <ScrollView style={{flex: 1}} bounces={false}>
-              <View style={{...styles.DzHome1, paddingVertical: HEIGHT * 0.03}}>
-                <DzHeader
-                  leftIcon={Feather}
-                  rightIcon={FontAwesome}
-                  rightIconName="heart"
-                  leftIconName="shopping-cart"
-                  leftIconColor="white"
-                  rightIconColor="white"
-                  rightIconAction={DzGotoFav}
-                  leftIconAction={DzGotoCart}
-                  Title={
-                    <Text style={styles.DzHome2}>
-                      THE <Text style={styles.DzHome3}>FOOD</Text> DOOR
-                    </Text>
-                  }
+            <Loop
+              style={{marginTop: HEIGHT * 0.02}}
+              data={Dzcategories}
+              renderItem={({item}) => (
+                <TabList
+                  item={item}
+                  DzcurrentCat={DzcurrentCat}
+                  DzchangeTab={DzchangeTab}
                 />
-                <View style={styles.DzHome4}>
-                  <TouchableOpacity
-                    onPress={DzGotoSearch}
-                    style={{
-                      marginTop: HEIGHT * 0.025,
-                      marginBottom: -HEIGHT * 0.05,
-                      ...styles.DzHome5,
-                    }}>
-                    <DzSearchBar editable={false} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View
-                style={{marginTop: HEIGHT * 0.05, marginBottom: HEIGHT * 0.03}}>
-                <Loop
-                  data={Dzcategories}
-                  renderItem={({item}) => (
-                    <TabList
-                      item={item}
-                      DzcurrentCat={DzcurrentCat}
-                      DzchangeTab={DzchangeTab}
-                    />
-                  )}
+              )}
+            />
+            <View
+              style={{
+                paddingLeft: H_W.width * 0.08,
+                paddingRight: H_W.width * 0.15,
+                marginTop: HEIGHT * 0.02,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                Popular {DzcurrentCat.categoryName}
+              </Text>
+              <MaterialCommunityIcons name="fire" color="orange" size={35} />
+            </View>
+          </ScrollView>
+        }
+        numColumns={2}
+        horizontal={false}
+        data={DztabProducts}
+        renderItem={({item}) => (
+          <DzVerticalTile
+            item={item}
+            DzGoToSingleProduct={DzGoToSingleProduct}
+          />
+        )}
+        ListFooterComponent={
+          <>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginTop: HEIGHT * 0.01,
+                marginHorizontal: H_W.width * 0.03,
+              }}>
+              Your Favourite {DzcurrentCat.categoryName}
+            </Text>
+            <Loop
+              data={props.DzFavs.filter(
+                (item) => item.categoryId === DzcurrentCat.id,
+              )}
+              renderItem={({item}) => (
+                <DzVerticalTile
+                  item={item}
+                  DzGoToSingleProduct={DzGoToSingleProduct}
                 />
-              </View>
-            </ScrollView>
-          }
-        />
-      </View> */}
+              )}
+            />
+          </>
+        }
+      />
     </WrapperScreen>
   );
 }
@@ -129,82 +149,137 @@ export const DzVerticalTile = ({
   DzremoveFav,
   DzsetFav,
 }) => {
-  useEffect(() => {
-    checkIfFav();
-  });
-  const [fav, setFav] = useState(false);
-
-  const checkIfFav = () => {
-    for (let Dz = 0; Dz < DzFavs.length; Dz++) {
-      if (DzFavs[Dz].id === item.id) {
-        setFav(true);
-        break;
-      }
-    }
-  };
-  const toggleFav = () => {
-    fav ? DzremoveFav(item.id) : DzsetFav(item);
-    setFav(!fav);
-  };
   const insets = useSafeAreaInsets();
   const HEIGHT = H_W.height - (insets.bottom + insets.top);
   return (
     <TouchableOpacity
       onPress={() => DzGoToSingleProduct(item)}
-      style={styles.DzHome6}>
-      <ImageBackground
-        source={item.images}
-        style={{width: '100%', height: HEIGHT * 0.2}}
-        resizeMode="contain"
-      />
-      <Text
-        numberOfLines={1}
-        style={{...styles.DzHome7, marginTop: HEIGHT * 0.007}}>
-        {item.productName}
-      </Text>
-      <View style={{marginTop: HEIGHT * 0.01, ...styles.DzHome8}}>
-        <StarRating rating={item.rating} size={H_W.width * 0.17} />
-        <Text style={styles.DzHome9}>{item.rating}</Text>
-      </View>
+      style={{
+        width: H_W.width * 0.42,
+        marginHorizontal: H_W.width * 0.04,
+        marginVertical: HEIGHT * 0.016,
+        alignItems: 'center',
+      }}>
       <View
         style={{
-          ...styles.DzHome10,
-          marginTop: HEIGHT * 0.015,
-          marginBottom: HEIGHT * 0.01,
+          borderRadius: H_W.width * 0.2,
+          backgroundColor: `rgba(${colors.rgb_Primary}, 0.1)`,
         }}>
-        <Text style={styles.DzHome11}>${item.price}</Text>
-        <TouchableOpacity onPress={toggleFav}>
-          <FontAwesome
-            name="heart"
-            color={`rgba(${colors.rgb_Primary}, ${fav ? 1 : 0.5})`}
-            size={20}
-          />
-        </TouchableOpacity>
+        <FastImage
+          source={item.images}
+          style={{
+            width: H_W.width * 0.37,
+            height: HEIGHT * 0.2,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 4.65,
+          }}
+          resizeMode="contain"
+        />
+      </View>
+
+      <Text
+        numberOfLines={2}
+        style={{
+          textAlign: 'center',
+          marginTop: HEIGHT * 0.01,
+          fontWeight: 'bold',
+        }}>
+        {item.productName}
+      </Text>
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginTop: HEIGHT * 0.007,
+        }}>
+        <Text
+          style={{
+            marginHorizontal: H_W.width * 0.02,
+            fontWeight: 'bold',
+            color: colors.lightGrey3,
+          }}>
+          <AntDesign name="star" color="#ffce33" size={H_W.width * 0.037} />
+          {item.rating}
+        </Text>
+        <View
+          style={{
+            backgroundColor: `rgba(${colors.rgb_Primary}, 0.2)`,
+            borderRadius: 50,
+            paddingVertical: HEIGHT * 0.002,
+          }}>
+          <Text
+            style={{
+              marginHorizontal: H_W.width * 0.02,
+              fontWeight: 'bold',
+              color: colors.primary,
+            }}>
+            ${item.price}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
 };
 
 export const TabList = ({item, DzchangeTab, DzcurrentCat}) => {
+  const insets = useSafeAreaInsets();
+  const HEIGHT = H_W.height - (insets.bottom + insets.top);
   return (
     <TouchableOpacity
-      style={styles.HomeTabsWrapper}
+      style={{
+        ...styles.HomeTabsWrapper,
+        backgroundColor: `rgba(${colors.rgb_Primary},${
+          item.categoryName === DzcurrentCat.categoryName ? 1 : 0.15
+        })`,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.4,
+        shadowRadius: 4.65,
+      }}
       onPress={() => DzchangeTab(item)}>
+      <ImageBackground
+        source={item.categoryImage}
+        style={
+          item.categoryName === DzcurrentCat.categoryName
+            ? {
+                width: H_W.width * 0.16,
+                height: H_W.width * 0.16,
+              }
+            : {width: H_W.width * 0.13, height: H_W.width * 0.13}
+        }
+        imageStyle={
+          item.categoryName === DzcurrentCat.categoryName
+            ? {marginLeft: -H_W.width * 0.06, marginTop: -HEIGHT * 0.02}
+            : {}
+        }
+        resizeMode="contain"
+      />
       <Text
         style={{
           ...styles.HomeTabsText,
           color:
             item.categoryName === DzcurrentCat.categoryName
-              ? colors.primary
-              : `rgba(${colors.rgb_Primary}, 0.5)`,
+              ? 'white'
+              : colors.primary,
         }}>
-        {item.categoryName.toUpperCase()}
+        {item.categoryName}
       </Text>
-      {item.categoryName === DzcurrentCat.categoryName ? (
-        <View style={styles.tabIndicator} />
-      ) : null}
     </TouchableOpacity>
   );
+};
+
+const border = {
+  borderWidth: 1,
+  borderColor: 'red',
 };
 const styles = StyleSheet.create({
   DzHome21: {},
@@ -293,17 +368,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   HomeTabsText: {
-    fontSize: 23,
-    fontWeight: '700',
+    marginLeft: H_W.width * 0.05,
+    fontSize: 17.5,
+    fontWeight: 'bold',
   },
   HomeTabsWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    flexDirection: 'row',
     marginHorizontal: H_W.width * 0.05,
-    height: H_W.width * 0.1,
-    paddingHorizontal: H_W.width * 0.02,
-    paddingTop: H_W.width * 0.02,
+    paddingLeft: H_W.width * 0.02,
+    paddingRight: H_W.width * 0.04,
+    borderRadius: 50,
   },
 });
 

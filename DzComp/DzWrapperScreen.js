@@ -2,7 +2,6 @@
 import React from 'react';
 import {View, StatusBar} from 'react-native';
 import {SafeAreaInsetsContext} from 'react-native-safe-area-context';
-import {colors} from './DzColor';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 function WrapperScreen(props) {

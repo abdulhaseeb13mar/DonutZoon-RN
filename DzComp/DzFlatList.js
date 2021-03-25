@@ -15,6 +15,9 @@ function Looping(props) {
   return (
     <View style={{flex: 1}}>
       <FlatList
+        ListFooterComponent={
+          props.ListFooterComponent && props.ListFooterComponent
+        }
         ListHeaderComponent={
           props.ListHeaderComponent && props.ListHeaderComponent
         }

@@ -31,10 +31,11 @@ function SingleProduct(props) {
   useEffect(() => {
     checkIfFav();
   }, []);
+  const DzProduct = props.DzProduct;
   const [fav, setFav] = useState(false);
+  const [currentImage, setCurrentImage] = useState(DzProduct.images);
   const insets = useSafeAreaInsets();
   const HEIGHT = H_W.height - (insets.bottom + insets.top);
-  const DzProduct = props.DzProduct;
 
   const checkIfFav = () => {
     for (let us = 0; us < props.DzFavs.length; us++) {
@@ -61,6 +62,30 @@ function SingleProduct(props) {
       props.DzremoveCartAction(DzProduct);
   };
 
+  const renderSmallImages = () => {
+    return [DzProduct.images, DzProduct.images, DzProduct.images].map(
+      (item, index) => (
+        <TouchableOpacity
+          onPress={() => setCurrentImage(item)}
+          key={index}
+          style={{
+            backgroundColor: colors.lightBackground2,
+            padding: H_W.width * 0.015,
+            borderRadius: 13,
+            marginHorizontal: H_W.width * 0.03,
+          }}>
+          <ImageBackground
+            source={item}
+            style={{
+              width: H_W.width * 0.11,
+              height: H_W.width * 0.13,
+            }}
+          />
+        </TouchableOpacity>
+      ),
+    );
+  };
+
   const DzGotoCart = () => NavigationRef.Navigate('DzCart');
   const DzGoBack = () => NavigationRef.GoBack();
 
@@ -70,19 +95,39 @@ function SingleProduct(props) {
         <DzHeader
           leftIcon={Entypo}
           rightIcon={FontAwesome}
-          rightIconName="heart"
+          rightIconName="bookmark"
           leftIconName="chevron-left"
           leftIconAction={DzGoBack}
-          leftIconColor={colors.secondary}
+          leftIconColor={colors.primary}
           rightIconAction={toggleFav}
-          rightIconColor={`rgba(${colors.rgb_Primary}, ${fav ? 1 : 0.5})`}
+          rightIconColor={`rgba(224,180,0, ${fav ? 1 : 0.4})`}
+          Title={<Text style={{fontSize: 20}}>Details</Text>}
         />
         <View style={styles.DzSp1}>
           <ImageBackground
-            source={DzProduct.images}
-            style={{width: '100%', height: HEIGHT * 0.37}}
+            source={currentImage}
+            style={{
+              width: '100%',
+              height: HEIGHT * 0.34,
+              shadowColor: colors.darkGray,
+              shadowOffset: {
+                width: 0,
+                height: 35,
+              },
+              shadowOpacity: 0.46,
+              shadowRadius: 30.14,
+            }}
             resizeMode="contain"
           />
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              marginTop: HEIGHT * 0.01,
+            }}>
+            {renderSmallImages()}
+          </View>
         </View>
         <Text
           style={{
@@ -93,12 +138,22 @@ function SingleProduct(props) {
         </Text>
         <View
           style={{
-            marginTop: HEIGHT * 0.01,
+            marginTop: HEIGHT * 0.005,
             ...styles.DzSp3,
           }}>
-          <StarRating rating={DzProduct.rating} size={H_W.width * 0.3} />
+          <StarRating rating={DzProduct.rating} size={H_W.width * 0.2} />
           <Text style={styles.DzSp4}>{DzProduct.rating}</Text>
         </View>
+        <Text
+          style={{
+            marginHorizontal: H_W.width * 0.03,
+            fontWeight: 'bold',
+            fontSize: 18,
+            color: colors.primary,
+            marginTop: HEIGHT * 0.04,
+          }}>
+          Details
+        </Text>
         <Text
           style={{
             ...styles.DzSp5,
@@ -107,10 +162,15 @@ function SingleProduct(props) {
           }}>
           {DzProduct.Description}
         </Text>
-        <View style={styles.DzSp6}>
-          <Text style={{fontFamily: textFont.DINAlternate, fontSize: 26}}>
-            $ {DzProduct.price}
-          </Text>
+        <View style={{...styles.DzSp6, marginTop: HEIGHT * 0.015}}>
+          <View>
+            <Text style={{color: colors.darkGray, fontWeight: 'bold'}}>
+              Price
+            </Text>
+            <Text style={{fontFamily: textFont.DINAlternate, fontSize: 26}}>
+              $ {DzProduct.price}
+            </Text>
+          </View>
           {props.DzCart[DzProduct.id] !== undefined &&
           props.DzCart[DzProduct.id].added !== 0 ? (
             <View
@@ -119,13 +179,13 @@ function SingleProduct(props) {
                 height: HEIGHT * 0.06,
               }}>
               <TouchableOpacity onPress={DzRemoveFromCart} style={styles.DzSp8}>
-                <Feather name="minus" color="black" size={25} />
+                <Feather name="minus" color="white" size={23} />
               </TouchableOpacity>
               <Text style={styles.DzSp9}>
                 {props.DzCart[DzProduct.id].added}
               </Text>
               <TouchableOpacity onPress={DzAddToCart} style={styles.DzSp10}>
-                <Feather name="plus" color="black" size={25} />
+                <Feather name="plus" color="white" size={23} />
               </TouchableOpacity>
             </View>
           ) : (
@@ -136,18 +196,44 @@ function SingleProduct(props) {
                 height: HEIGHT * 0.06,
               }}>
               <Text style={styles.DzSp12}>Add to Cart</Text>
-              <View
+              {/* <View
                 style={{
                   height: HEIGHT * 0.06,
                   ...styles.DzSp13,
                 }}>
                 <Feather name="plus" color="white" size={25} />
-              </View>
+              </View> */}
             </TouchableOpacity>
           )}
         </View>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: HEIGHT * 0.02,
+          }}>
+          <Button
+            raised
+            onPress={DzGotoCart}
+            title="Order Now"
+            titleStyle={{fontWeight: 'bold', fontSize: 18}}
+            containerStyle={{width: '80%', borderRadius: 50}}
+            buttonStyle={{
+              borderRadius: 50,
+              paddingVertical: HEIGHT * 0.02,
+              backgroundColor: colors.primary,
+              shadowColor: colors.primary,
+              shadowOffset: {
+                width: 0,
+                height: 8,
+              },
+              shadowOpacity: 0.46,
+              shadowRadius: 11.14,
+            }}
+          />
+        </View>
       </KeyboardAwareScrollView>
-      <View
+      {/* <View
         style={{
           marginBottom: -insets.bottom,
           paddingBottom: insets.bottom,
@@ -162,7 +248,7 @@ function SingleProduct(props) {
             backgroundColor: colors.primary,
           }}
         />
-      </View>
+      </View> */}
     </WrapperScreen>
   );
 }
@@ -174,7 +260,10 @@ const mapStateToProps = (state) => {
     DzCart: state.DzCartReducer.items,
   };
 };
-
+const border = {
+  borderWidth: 1,
+  borderColor: 'red',
+};
 export default connect(mapStateToProps, {
   DzsetFavAction,
   DzremoveFavAction,
@@ -193,6 +282,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 29,
     paddingHorizontal: H_W.width * 0.03,
+    fontFamily: textFont.DINAlternate,
   },
   DzSp3: {
     display: 'flex',
@@ -202,14 +292,14 @@ const styles = StyleSheet.create({
   },
   DzSp4: {
     marginLeft: H_W.width * 0.065,
-    color: colors.secondary,
-    fontSize: 22,
+    color: colors.lightGrey3,
+    fontSize: 18,
     fontWeight: 'bold',
     textAlignVertical: 'center',
   },
   DzSp5: {
     paddingHorizontal: H_W.width * 0.03,
-    fontSize: 18,
+    fontSize: 15,
     color: colors.darkGray,
     fontWeight: 'bold',
     opacity: 0.5,
@@ -224,28 +314,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: colors.primary,
-    backgroundColor: 'white',
+    backgroundColor: `rgba(${colors.rgb_Primary}, 0.2)`,
     alignSelf: 'stretch',
     width: H_W.width * 0.4,
     borderRadius: 50,
+    paddingHorizontal: H_W.width * 0.04,
   },
   DzSp8: {
-    alignSelf: 'stretch',
-    width: H_W.width * 0.15,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 50,
+    padding: 2,
+    backgroundColor: colors.primary,
   },
   DzSp9: {
-    fontSize: 23,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.primary,
   },
   DzSp10: {
-    alignSelf: 'stretch',
-    width: H_W.width * 0.15,
     alignItems: 'center',
+    padding: 2,
+    borderRadius: 50,
+    backgroundColor: colors.primary,
     justifyContent: 'center',
   },
   DzSp11: {

@@ -17,6 +17,8 @@ function DzConfirmOrder(props) {
   };
   return (
     <WrapperScreen
+      barStyle="light-content"
+      statusBar={colors.primary}
       style={{
         backgroundColor: colors.primary,
       }}>
@@ -26,11 +28,7 @@ function DzConfirmOrder(props) {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <MaterialIcons
-          name="fastfood"
-          size={H_W.width * 0.4}
-          color={colors.secondary}
-        />
+        <MaterialIcons name="icecream" size={H_W.width * 0.4} color="white" />
         <Text
           style={{
             fontWeight: 'bold',
@@ -46,27 +44,20 @@ function DzConfirmOrder(props) {
           onPress={ResetAndGoHome}
           title="Get More Food!"
           buttonStyle={{
-            backgroundColor: colors.secondary,
+            backgroundColor: 'white',
             width: H_W.width * 0.6,
             borderRadius: 10,
           }}
           raised
-          titleStyle={{fontSize: 20, fontWeight: 'bold', borderRadius: 10}}
+          titleStyle={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            borderRadius: 10,
+            color: colors.primary,
+          }}
           containerStyle={{marginTop: 15, borderRadius: 10}}
         />
       </View>
-      <MaterialIcons
-        name="celebration"
-        color="rgba(255,255,255,0.2)"
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          right: -H_W.width * 0.1,
-          zIndex: -1,
-          transform: [{rotateY: '180deg'}],
-        }}
-        size={H_W.width * 1}
-      />
     </WrapperScreen>
   );
 }

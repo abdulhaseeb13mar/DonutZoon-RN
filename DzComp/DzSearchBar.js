@@ -17,13 +17,6 @@ export default function SearchBar({editable, changeSearchText}) {
 
   return (
     <View style={{...styles.SB_Wrapper, height: HEIGHT * 0.065}}>
-      <View style={styles.SB_icon}>
-        <FontAwesome
-          name="search"
-          size={18}
-          color={isFocused ? colors.primary : colors.primary}
-        />
-      </View>
       <TextInput
         style={styles.SB_input}
         placeholderTextColor={colors.lightGrey3}
@@ -33,6 +26,13 @@ export default function SearchBar({editable, changeSearchText}) {
         onFocus={() => ChangeFocus(true)}
         onChangeText={onChangeText}
       />
+      <View style={styles.SB_icon}>
+        <FontAwesome
+          name="search"
+          size={18}
+          color={isFocused ? colors.primary : colors.primary}
+        />
+      </View>
     </View>
   );
 }

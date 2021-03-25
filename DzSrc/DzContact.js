@@ -75,7 +75,7 @@ const ConfirmOrder = (props) => {
       );
       const response = await res.json();
       setLoading(false);
-      response.status ? setShowModal(true) : ShowToast('Some error occurred');
+      response.status ? MoveToConfirmOrder() : ShowToast('Some error occurred');
     } catch (error) {
       console.log(error);
     }
@@ -105,6 +105,11 @@ const ConfirmOrder = (props) => {
     }
   };
 
+  const MoveToConfirmOrder = () => {
+    props.DzresetCart();
+    NavPointer.Push('DzConfirmOrder');
+  };
+
   const closeModal = () => {
     setShowModal(false);
     props.DzresetCart();
@@ -118,24 +123,15 @@ const ConfirmOrder = (props) => {
   const changeFirstName = (t) => setFirstName(t);
 
   return (
-    <WrapperScreen
-      style={{backgroundColor: 'white'}}
-      barStyle="light-content"
-      statusColor={colors.primary}>
+    <WrapperScreen style={{backgroundColor: 'white'}}>
       <KeyboardAwareScrollView style={styles.container} bounces={false}>
-        <View style={styles.DzContact1}>
-          <UseHeader
-            leftIcon={Entypo}
-            leftIconName="chevron-left"
-            leftIconColor="white"
-            leftIconAction={DzGoBack}
-            Title={<Text style={styles.DzContact2}>Checkout</Text>}
-          />
-        </View>
-
-        <Text style={{...styles.DzContact3, marginVertical: HEIGHT * 0.015}}>
-          Contact Info
-        </Text>
+        <UseHeader
+          leftIcon={Entypo}
+          leftIconName="chevron-left"
+          leftIconColor={colors.primary}
+          leftIconAction={DzGoBack}
+          Title={<Text style={styles.DzContact2}>Contact Info</Text>}
+        />
         <View style={styles.DzPersonalInfoWrapper}>
           <View style={styles.DzSinglePersonalInfoWrapper}>
             <Text
@@ -245,25 +241,34 @@ const ConfirmOrder = (props) => {
             </Text>
           </View>
         </Overlay>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Button
+            raised
+            loading={loading}
+            onPress={DzConfirm}
+            disabled={props.DzTotalItems === 0}
+            title="CONFIRM ORDER"
+            titleStyle={{fontWeight: 'bold', fontSize: 20}}
+            containerStyle={{width: '80%', borderRadius: 50}}
+            buttonStyle={{
+              borderRadius: 50,
+              paddingVertical: HEIGHT * 0.02,
+              backgroundColor: colors.primary,
+              shadowColor: colors.primary,
+              shadowOffset: {
+                width: 0,
+                height: 8,
+              },
+              shadowOpacity: 0.46,
+              shadowRadius: 11.14,
+            }}
+          />
+        </View>
       </KeyboardAwareScrollView>
-      <View
-        style={{
-          marginBottom: -insets.bottom,
-          paddingBottom: insets.bottom,
-          backgroundColor: colors.primary,
-        }}>
-        <Button
-          loading={loading}
-          onPress={DzConfirm}
-          disabled={props.DzTotalItems === 0}
-          title="CONFIRM ORDER"
-          titleStyle={{fontWeight: 'bold', fontSize: 20}}
-          buttonStyle={{
-            paddingVertical: HEIGHT * 0.02,
-            backgroundColor: colors.primary,
-          }}
-        />
-      </View>
     </WrapperScreen>
   );
 };
@@ -286,7 +291,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   DzContact2: {
-    color: 'white',
+    color: colors.primary,
     fontSize: 22,
   },
   DzContact3: {

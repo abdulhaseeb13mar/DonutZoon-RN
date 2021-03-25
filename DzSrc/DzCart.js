@@ -50,22 +50,19 @@ export const Cart = (props) => {
   const DzinfoScreen = () => RefNavigation.Navigate('DzContact');
 
   return (
-    <WrapperScreen
-      style={{backgroundColor: 'white'}}
-      barStyle="light-content"
-      statusColor={colors.primary}>
+    <WrapperScreen style={{backgroundColor: 'white'}}>
       <View style={styles.DzCart1}>
         <UseHeader
           leftIcon={Entypo}
           leftIconName="chevron-left"
-          leftIconColor="white"
+          leftIconColor={colors.primary}
           leftIconAction={DzGoBack}
           Title={<Text style={styles.DzCart2}>Cart</Text>}
         />
         <View
           style={{
             paddingVertical: HEIGHT * 0.01,
-            marginBottom: -HEIGHT * 0.02,
+            // marginBottom: -HEIGHT * 0.02,
             ...styles.DzCart3,
           }}>
           <View style={styles.DzCart4}>
@@ -104,18 +101,26 @@ export const Cart = (props) => {
       </View>
       <View
         style={{
-          marginBottom: -insets.bottom,
-          paddingBottom: insets.bottom,
-          backgroundColor: colors.primary,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
         <Button
+          raised
           onPress={DzinfoScreen}
-          disabled={props.DzTotalItems === 0}
-          title="PROCEED TO CHECKOUT"
-          titleStyle={{fontWeight: 'bold', fontSize: 20}}
+          title="Proceed to Checkout"
+          titleStyle={{fontWeight: 'bold', fontSize: 18}}
+          containerStyle={{width: '80%', borderRadius: 50}}
           buttonStyle={{
+            borderRadius: 50,
             paddingVertical: HEIGHT * 0.02,
             backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+            shadowOffset: {
+              width: 0,
+              height: 8,
+            },
+            shadowOpacity: 0.46,
+            shadowRadius: 11.14,
           }}
         />
       </View>
@@ -141,13 +146,12 @@ export default connect(mapStateToProps, {
 
 const styles = StyleSheet.create({
   DzCart1: {
-    backgroundColor: colors.primary,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     alignItems: 'center',
   },
   DzCart2: {
-    color: 'white',
+    color: colors.primary,
     fontSize: 22,
   },
   DzCart3: {

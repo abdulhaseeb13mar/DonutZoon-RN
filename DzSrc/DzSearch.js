@@ -65,16 +65,12 @@ function Search(props) {
 
   const DzchangeSearchText = (t) => setSearchText(t);
   return (
-    <WrapperScreen
-      style={{backgroundColor: 'white'}}
-      barStyle="light-content"
-      statusColor={colors.primary}>
+    <WrapperScreen style={{backgroundColor: 'white'}}>
       <View style={styles.DzSearch1}>
         <DzHeader
           leftIcon={Entypo}
           leftIconName="chevron-left"
-          leftIconColor="white"
-          rightIconColor="white"
+          leftIconColor={colors.primary}
           leftIconAction={DzGoBack}
           Title={<Text style={styles.DzSearch2}>Search</Text>}
         />
@@ -108,15 +104,14 @@ export default connect(mapStateToProps, {
 
 const styles = StyleSheet.create({
   DzSearch1: {
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
   DzSearch2: {
     fontWeight: 'bold',
     fontSize: 20,
-    fontFamily: 'Verdana-Bold',
-    color: 'white',
+    color: colors.primary,
   },
   DzSearch3: {
     alignItems: 'center',

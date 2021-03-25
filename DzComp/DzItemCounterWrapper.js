@@ -3,7 +3,7 @@ import React from 'react';
 import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {H_W} from './DzDim';
-import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DzaddCartAction, DzremoveCartAction} from '../DzRedux/DzActions';
 
@@ -74,8 +74,8 @@ const DefaultCounter = ({
             position === 'top' || position === 'bottom' ? 'row' : 'column',
         }}>
         <TouchableOpacity onPress={() => DzremoveCart(item)}>
-          <Feather
-            name="minus-circle"
+          <FontAwesome
+            name="minus"
             size={H_W.width * 0.05}
             color={counterContentColor ? counterContentColor : 'black'}
           />
@@ -88,8 +88,8 @@ const DefaultCounter = ({
           {item.added}
         </Text>
         <TouchableOpacity onPress={() => DzaddCart(item)}>
-          <Feather
-            name="plus-circle"
+          <FontAwesome
+            name="plus"
             size={H_W.width * 0.05}
             color={counterContentColor ? counterContentColor : 'black'}
           />
