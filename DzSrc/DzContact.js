@@ -35,7 +35,11 @@ const ConfirmOrder = (props) => {
     if (!formValidResponse.status) {
       errorMsgHandler(formValidResponse.errCategory, formValidResponse.errMsg);
     } else {
-      CallApi();
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        MoveToConfirmOrder();
+      }, 2000);
       props.DzUserAction({
         email: email,
         firstName: firstName,
